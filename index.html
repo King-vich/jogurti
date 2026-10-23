@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Jogurti · ultimate frisbee</title>
+  <meta name="description" content="Jogurti – nový, zatím neoficiální oddíl ultimate frisbee. Přijď si s námi zahrát.">
+  <meta name="theme-color" content="#d9edfc">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.169.0/examples/jsm/",
+        "lenis": "https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.mjs"
+      }
+    }
+  </script>
+</head>
+<body>
+  <!-- Horní lišta. Název týmu se v ní objeví až po odhalení na víčku. -->
+  <header class="lista" id="lista">
+    <a class="lista__znacka" href="#uvod" aria-label="Jogurti – na začátek">
+      <span class="lista__kelimek" aria-hidden="true"></span>
+      <span class="lista__nazev">JOGURTI</span>
+    </a>
+    <button class="lista__menu" id="menuTlacitko" aria-expanded="false" aria-controls="menu">Menu</button>
+    <nav class="lista__odkazy" id="menu">
+      <a href="#o-nas">O nás</a>
+      <a href="#treninky">Tréninky</a>
+      <a href="#fotky">Fotky</a>
+      <a class="lista__cta" href="#kontakt">Přijď hrát</a>
+    </nav>
+  </header>
+
+  <div class="postup-stranky" id="postupStranky" aria-hidden="true"></div>
+
+  <!-- Kelímky příchutí v sekci Fotky a ponoření do nich (kreslí js/kelimky.js). -->
+  <canvas class="kelimky-platno" id="kelimkyPlatno" aria-hidden="true"></canvas>
+  <div class="ponor" id="ponor" aria-hidden="true"></div>
+  <div class="ponor ponor--konec" id="ponorKonec" aria-hidden="true"></div>
+
+  <!-- Štafeta: hráči v sekcích si přehazují disk (kreslí js/stafeta.js). -->
+  <canvas class="stafeta" id="stafeta" aria-hidden="true"></canvas>
+
+  <main>
+    <!-- ===================== ÚVOD: kelímek → víčko-frisbee → přechod ===================== -->
+    <section class="hero" id="uvod" aria-label="Úvod">
+      <div class="hero__sticky">
+        <canvas class="hero__platno" id="heroPlatno" aria-hidden="true"></canvas>
+
+        <div class="hero__text" id="heroText">
+          <p class="stitek">Ultimate frisbee oddíl</p>
+          <h1>Čerstvě<br>otevřeno.</h1>
+          <p class="hero__podtitul">Nový, zatím neoficiální oddíl ultimate frisbee. Sjeď dolů a&nbsp;sundej víčko.</p>
+        </div>
+
+        <p class="hero__popisek" id="heroPopisek">Hrajeme fér, házíme rádi a&nbsp;bereme nováčky.</p>
+
+        <div class="hero__sipka" id="heroSipka" aria-hidden="true">
+          <span>scrolluj</span>
+          <i></i>
+        </div>
+
+        <!-- záloha, kdyby prohlížeč neuměl WebGL -->
+        <div class="hero__zaloha" id="heroZaloha" hidden>
+          <p class="stitek">Ultimate frisbee oddíl</p>
+          <p class="hero__zaloha-nazev">JOGURTI</p>
+        </div>
+
+        <div class="hero__prechod" id="heroPrechod" aria-hidden="true"></div>
+      </div>
+    </section>
+
+    <!-- ===================== O NÁS ===================== -->
+    <section class="sekce o-nas" id="o-nas">
+      <div class="obal">
+        <div class="nadpis-radek">
+          <div>
+            <p class="stitek">O nás</p>
+            <h2>Jsme Jogurti.<br><span class="zvyrazneni">Parta, co hází diskem.</span></h2>
+          </div>
+          <div class="hrac-kotva" data-stanice="0" aria-hidden="true"></div>
+        </div>
+        <div class="o-nas__mrizka">
+          <div class="o-nas__text">
+            <p class="perex">Jednoho dne nám přestalo stačit házet si jen tak v&nbsp;parku. Chceme hrát ultimate pořádně, na turnajích a&nbsp;hlavně spolu.</p>
+            <p>Zatím jsme neoficiální oddíl: nemáme registraci ani klubovnu, ale máme disky, hřiště a&nbsp;chuť se zlepšovat. Ultimate je rychlý bezkontaktní sport pro kluky i&nbsp;holky a&nbsp;hraje se bez rozhodčích. Férovost si hlídají sami hráči.</p>
+            <p class="doplnit">Proč zrovna Jogurti? <em>[doplnit příběh jména]</em></p>
+          </div>
+          <ul class="karty-hodnot">
+            <li class="karta-hodnota">
+              <span class="karta-hodnota__ikona" aria-hidden="true">🤝</span>
+              <h3>Hrajeme fér</h3>
+              <p>Spirit of the Game je pro nás stejně důležitý jako skóre.</p>
+            </li>
+            <li class="karta-hodnota">
+              <span class="karta-hodnota__ikona" aria-hidden="true">🥏</span>
+              <h3>Bereme nováčky</h3>
+              <p>Házet tě naučíme. Stačí přijít a&nbsp;zkusit to.</p>
+            </li>
+            <li class="karta-hodnota">
+              <span class="karta-hodnota__ikona" aria-hidden="true">🏆</span>
+              <h3>Jezdíme na turnaje</h3>
+              <p>Zatím hlavně přátelské, ale někde začít musíme.</p>
+            </li>
+          </ul>
+        </div>
+        <dl class="cisla">
+          <div><dt>rok založení</dt><dd>2026</dd></div>
+          <div><dt>hráčů a&nbsp;hráček</dt><dd class="doplnit">[?]</dd></div>
+          <div><dt>rozhodčích na hřišti</dt><dd>0</dd></div>
+          <div><dt>hráčů na hřišti za tým</dt><dd>7</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <!-- ===================== JAK TRÉNUJEME ===================== -->
+    <section class="sekce treninky" id="treninky">
+      <div class="obal">
+        <div class="nadpis-radek nadpis-radek--vlevo">
+          <div>
+            <p class="stitek stitek--svetly">Jak trénujeme</p>
+            <h2>Přijď na trénink.<br><span class="zvyrazneni zvyrazneni--svetle">Disk ti půjčíme.</span></h2>
+          </div>
+          <div class="hrac-kotva" data-stanice="1" aria-hidden="true"></div>
+        </div>
+
+        <div class="rozvrh">
+          <article class="rozvrh__karta">
+            <p class="rozvrh__sezona">☀️ Léto · venku</p>
+            <p class="rozvrh__cas doplnit">[den] od [čas]</p>
+            <p class="rozvrh__misto doplnit">[hřiště / park]</p>
+          </article>
+          <article class="rozvrh__karta">
+            <p class="rozvrh__sezona">❄️ Zima · hala</p>
+            <p class="rozvrh__cas doplnit">[den] [čas]</p>
+            <p class="rozvrh__misto doplnit">[tělocvična]</p>
+          </article>
+        </div>
+
+        <h3 class="mezititulek">Jak vypadá trénink</h3>
+        <ol class="prubeh">
+          <li><span class="prubeh__min">15 min</span><h4>Rozcvička a&nbsp;rozházení</h4><p>Rozběhat se, protáhnout a&nbsp;poslat si pár disků ve dvojicích.</p></li>
+          <li><span class="prubeh__min">20 min</span><h4>Házení</h4><p>Backhand, forehand, lob. Nováčci dostanou vlastního parťáka.</p></li>
+          <li><span class="prubeh__min">25 min</span><h4>Drilly</h4><p>Náběhy, chytání, markování a&nbsp;postavení v&nbsp;útoku i&nbsp;obraně.</p></li>
+          <li><span class="prubeh__min">30+ min</span><h4>Hra</h4><p>7 na 7 nebo podle toho, kolik nás přijde. Tady se to všechno spojí.</p></li>
+        </ol>
+
+        <div class="sebou">
+          <h3>Co si vzít</h3>
+          <ul>
+            <li>Kopačky nebo boty s&nbsp;dobrou podrážkou</li>
+            <li>Světlé i&nbsp;tmavé tričko (na rozdělení týmů)</li>
+            <li>Pití, hodně pití</li>
+            <li>Disk nemusíš, máme</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== FOTKY ===================== -->
+    <section class="sekce fotky" id="fotky">
+      <div class="obal">
+        <div class="nadpis-radek">
+          <div>
+            <p class="stitek">Fotografie</p>
+            <h2>Z&nbsp;hřiště i&nbsp;mimo něj</h2>
+          </div>
+          <div class="hrac-kotva" data-stanice="2" aria-hidden="true"></div>
+        </div>
+        <p class="sekce__uvod">Každá kategorie fotek je jedna příchuť. Najeď na kelímek a&nbsp;nakoukni pod víčko, kliknutím se ponoříš dovnitř.</p>
+        <!-- kelímky příchutí: odkazy vytvoří js/kelimky.js z js/prichute.js, 3D kreslí stejný modul do #kelimkyPlatno -->
+        <ul class="prichute" id="prichute"></ul>
+        <!-- poslední hráčka štafety: chytí disk rybičkou a pošle ho scooberem na kelímek v Kontaktu -->
+        <div class="fotky__skluz">
+          <div class="hrac-kotva hrac-kotva--siroka" data-stanice="3" data-pata="vlevo" aria-hidden="true"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===================== KONTAKT ===================== -->
+    <section class="sekce kontakt" id="kontakt">
+      <!-- stékající smetana: přechod ze světlé sekce Fotky do červené -->
+      <svg class="kontakt__smetana" viewBox="0 0 2400 130" preserveAspectRatio="xMidYMin slice" aria-hidden="true" focusable="false">
+        <defs>
+          <linearGradient id="smetanaBarva" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0.3" stop-color="#f7f9fc"/>
+            <stop offset="1" stop-color="#e2e9f3"/>
+          </linearGradient>
+          <filter id="smetanaStin" x="-5%" y="-20%" width="110%" height="160%">
+            <feDropShadow dx="0" dy="7" stdDeviation="6" flood-color="#5c0010" flood-opacity="0.35"/>
+          </filter>
+        </defs>
+        <path fill="url(#smetanaBarva)" filter="url(#smetanaStin)" d="M0 0H2400V28L2385.3 27.4C2371 26 2365.6 37.1 2366.5 51.7A11.4 11.4 0 0 1 2343.7 51.7C2344.6 37.1 2339.2 26 2324.9 24.3L2308.9 23.5C2290.1 21.7 2283 31.1 2284.3 37.8A15 15 0 0 1 2254.2 37.8C2255.4 31.1 2248.3 21.7 2229.5 20.8L2197.1 20.8C2177.7 22.1 2170.4 48 2171.7 92.8A15.5 15.5 0 0 1 2140.7 92.8C2141.9 48 2134.6 22.1 2115.2 24.5L2110.6 24.8C2085.8 28.8 2076.4 43 2078 56.3A19.9 19.9 0 0 1 2038.3 56.3C2040 43 2030.6 28.8 2005.7 32.4L2001.7 32.7C1984.1 34.4 1977.4 49.6 1978.6 71A14.1 14.1 0 0 1 1950.4 71C1951.6 49.6 1944.9 34.4 1927.3 35.2L1887.3 35.1L1847.3 34.2L1830.1 33.7C1807.3 32.3 1798.7 51.7 1800.2 78.7A18.2 18.2 0 0 1 1763.8 78.7C1765.3 51.7 1756.7 32.3 1734 31.7L1694 32L1654 33.2L1652.9 33.2C1639.6 34.4 1634.5 53 1635.4 85.8A10.6 10.6 0 0 1 1614.2 85.8C1615 53 1610 34.4 1596.7 35.6L1588.1 36C1562.4 37.9 1552.7 53.1 1554.5 67.9A20.6 20.6 0 0 1 1513.3 67.9C1515.1 53.1 1505.4 37.9 1479.7 38.1L1439.7 36.9L1399.7 34.6L1398.6 34.5C1378.6 31.3 1371 56.6 1372.3 99.7A16 16 0 0 1 1340.2 99.7C1341.6 56.6 1334 31.3 1313.9 28L1299.4 26.9C1277.3 24.3 1268.9 40.9 1270.4 62A17.7 17.7 0 0 1 1235 62C1236.5 40.9 1228.1 24.3 1206 23.1L1166 23.3L1154.6 23.5C1138.7 24.5 1132.7 50.9 1133.8 99.8A12.7 12.7 0 0 1 1108.4 99.8C1109.5 50.9 1103.5 24.5 1087.6 25.8L1047.6 27.1L1007.6 27.9L1006.2 27.9C986.6 27.9 979.1 40.6 980.5 54.6A15.7 15.7 0 0 1 949 54.6C950.3 40.6 942.9 27.9 923.2 26.9L883.2 25.6L843.2 24.2L830.2 23.8C817.4 23.2 812.6 37.1 813.4 59.2A10.2 10.2 0 0 1 793 59.2C793.8 37.1 789 23.2 776.2 23.1L736.2 23.9L712.1 24.9C688.8 28.1 679.9 35.9 681.5 35.4A18.7 18.7 0 0 1 644.1 35.4C645.7 35.9 636.8 28.1 613.5 31.9L573.5 34.9L561.6 35.7C535.2 38 525.2 51.3 527 61.2A21.1 21.1 0 0 1 484.8 61.2C486.5 51.3 476.6 38 450.2 38.1L453.1 38.1C431.5 36.8 423.3 44.4 424.7 44.7A17.3 17.3 0 0 1 390 44.7C391.5 44.4 383.3 36.8 361.6 34.8L321.6 33.1L287.2 32.1C273.9 31.7 268.9 41.4 269.8 53.6A10.6 10.6 0 0 1 248.6 53.6C249.5 41.4 244.5 31.7 231.2 31.7L218.5 31.8C196.8 32.8 188.6 46.8 190.1 61.9A17.3 17.3 0 0 1 155.4 61.9C156.8 46.8 148.7 32.8 127 34.2L115.5 34.5C98.3 35.1 91.8 53.8 92.9 83.6A13.8 13.8 0 0 1 65.4 83.6C66.5 53.8 60 35.1 42.8 35.1L2.8 34L0 33.9Z"/>
+        <g fill="#fff" opacity="0.85"><ellipse cx="2351.1" cy="49.4" rx="2.5" ry="4.3"/><ellipse cx="2263.9" cy="34.8" rx="3.3" ry="5.7"/><ellipse cx="2150.7" cy="89.7" rx="3.4" ry="5.9"/><ellipse cx="2051.2" cy="52.4" rx="4.4" ry="7.6"/><ellipse cx="1959.6" cy="68.1" rx="3.1" ry="5.4"/><ellipse cx="1775.7" cy="75.1" rx="4" ry="6.9"/><ellipse cx="1621.1" cy="83.7" rx="2.3" ry="4"/><ellipse cx="1526.7" cy="63.7" rx="4.5" ry="7.8"/><ellipse cx="1350.6" cy="96.5" rx="3.5" ry="6.1"/><ellipse cx="1246.5" cy="58.4" rx="3.9" ry="6.7"/><ellipse cx="1116.7" cy="97.3" rx="2.8" ry="4.8"/><ellipse cx="959.2" cy="51.4" rx="3.5" ry="6"/><ellipse cx="799.6" cy="57.2" rx="2.2" ry="3.9"/><ellipse cx="656.3" cy="31.7" rx="4.1" ry="7.1"/><ellipse cx="498.5" cy="57" rx="4.6" ry="8"/><ellipse cx="401.3" cy="41.2" rx="3.8" ry="6.6"/><ellipse cx="255.5" cy="51.4" rx="2.3" ry="4"/><ellipse cx="166.7" cy="58.5" rx="3.8" ry="6.6"/><ellipse cx="74.3" cy="80.9" rx="3" ry="5.2"/></g>
+      </svg>
+      <div class="obal kontakt__obal">
+        <div class="kelimek-kotva" aria-hidden="true"></div>
+        <h2>Chceš to zkusit?</h2>
+        <p>Napiš nám nebo rovnou přijď na trénink. Nikdo se nezlobí, když napoprvé nechytíš nic.</p>
+        <div class="kontakt__odkazy">
+          <a class="tlacitko" href="mailto:[doplnit]@email.cz">✉️ <span class="doplnit">[e-mail]</span></a>
+          <a class="tlacitko tlacitko--obrys" href="https://instagram.com/" target="_blank" rel="noopener">📸 <span class="doplnit">@[instagram]</span></a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="paticka">
+    <p><strong>JOGURTI</strong> · neoficiální oddíl ultimate frisbee · od 2026</p>
+  </footer>
+
+  <script type="module" src="js/main.js"></script>
+  <script type="module" src="js/hero.js"></script>
+  <script type="module" src="js/stafeta.js"></script>
+  <script type="module" src="js/kelimky.js"></script>
+</body>
+</html>

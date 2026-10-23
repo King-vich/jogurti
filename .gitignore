@@ -1,0 +1,6 @@
+# zálohy Blenderu a mezipaměť Pythonu
+*.blend1
+__pycache__/
+
+# stažené podklady (figuríny BodyChan/BodyKun z BlendSwapu) – web je nepotřebuje
+blender/stazene/
